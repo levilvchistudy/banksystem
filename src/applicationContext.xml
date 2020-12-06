@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd"
+	xmlns:tx="http://www.springframework.org/schema/tx">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql:///banksystem?useUnicode=true&amp;characterEncoding=utf-8">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="123456"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>entity.Account</value>
+				<value>entity.TransactionLog</value>
+				<value>entity.Personinfo</value>
+				<value>entity.TransactionType</value>
+				<value>entity.Admin</value>
+				<value>entity.Status</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<bean id="AccountDAO" class="dao.AccountDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="TransactionLogDAO" class="dao.TransactionLogDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="PersoninfoDAO" class="dao.PersoninfoDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="TransactionTypeDAO" class="dao.TransactionTypeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="AdminDAO" class="dao.AdminDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="StatusDAO" class="dao.StatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="AccountBiz" class="biz.AccountBiz">
+		<property name="accountDAO">
+			<ref bean="AccountDAO" />
+		</property>
+		<property name="personinfoDAO" ref="PersoninfoDAO"></property>
+		<property name="trasDAO" ref="TransactionLogDAO"></property>
+		<property name="transactionTypeDAO" ref="TransactionTypeDAO"></property>
+	</bean>
+
+	<bean id="AdminBiz" class="biz.AdminBiz">
+		<property name="adminDAO">
+			<ref bean="AdminDAO" />
+		</property>
+		<property name="accountDAO" ref="AccountDAO"></property>
+		<property name="statusDAO" ref="StatusDAO"></property>
+		<property name="personinfoDAO" ref="PersoninfoDAO"></property>
+	</bean>
+
+	<bean id="LoginAction" class="action.LoginAction">
+		<property name="accountBiz">
+			<ref bean="AccountBiz" />
+		</property>
+		<property name="adminBiz">
+			<ref bean="AdminBiz" />
+		</property>
+	</bean>
+	
+	<bean id="account" class="action.AccountAction">
+		<property name="accountBiz" ref="AccountBiz"></property>
+	</bean>
+	
+	<bean id="admin" class="action.AdminAction">
+		<property name="adminBiz" ref="AdminBiz"></property>
+	</bean>
+</beans>

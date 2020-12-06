@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.i18n.encoding" value="utf-8"></constant>
+    <package name="default" namespace="/" extends="struts-default">
+    	<!-- 定义一个登录状态的拦截器 -->  
+        <interceptors>  
+            <interceptor name="login" class="interceptot.LoginInterceptor"></interceptor>  
+        </interceptors> 
+    	<default-action-ref name="defaultAction"></default-action-ref>
+    	<action name="defaultAction">
+    		<result>/index.html</result>
+    	</action>
+    	<action name="login" class="LoginAction">
+    		<result name="account">/account/index.jsp</result>
+    		<result name="admin">/admin/index.jsp</result>
+    		<result name="login" type="chain">defaultAction</result>
+    	</action>
+    	
+    	<action name="*_*" class="{1}" method="{2}">
+    		<interceptor-ref name="login" /> 
+    		<result name="info">/info.jsp</result>
+    		<result>/info.jsp</result>
+    		<result name="deposit">/account/deposit.html</result>
+    		<result name="withdraw">/account/withdraw.html</result>
+    		<result name="reset">/account/reset.html</result>
+    		<result name="tras">/account/tras.html</result>
+    		<result name="record">/account/record.jsp</result>
+    		<result name="none">exit.html</result>
+    		<result name="page">/admin/page.jsp</result>
+    		<result name="admininfo">/admin/info.jsp</result>
+    		<result name="adminreset">/admin/reset.html</result>
+    		<result name="add">/admin/add.html</result>
+    	</action>
+    	
+    </package>
+</struts>    

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>银行系统--登录</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body>
+	<div class="container">
+		<section id="content">
+			<form action="login" method="post">
+				<h1>登 录</h1>
+				<div>
+					<input type="text" placeholder="Username" required="" name="username" />
+				</div>
+				<div>
+					<input type="password" placeholder="Password" required="" name="password" />
+				</div>
+				<div>
+					<select id="login" name="login">
+						<option value="account">用户登录</option>
+						<option value="admin">管理员登录</option>
+					</select>
+				</div>
+				<div>
+					<input type="submit" value="Log in" />
+				</div>
+			</form>
+			<!-- form -->
+		</section>
+		<!-- content -->
+	</div>
+	<!-- container -->
+</body>
+</html>
